@@ -1,6 +1,6 @@
 # OrmAdapterCouchbase
 
-TODO: Write a gem description
+WARNING: This is not finished, and very early stage to see if this can work
 
 ## Installation
 
@@ -16,9 +16,24 @@ Or install it yourself as:
 
     $ gem install orm_adapter_couchbase
 
-## Usage
+## ORM Adapter
 
-TODO: Write usage instructions here
+> "Provides a single point of entry for popular ruby ORMs. Its target audience
+> is gem authors who want to support more than one ORM."
+
+For more information see the [orm_adapter
+project](http://github.com/ianwhite/orm_adapter).
+
+## Development / Testing
+
+This project is tested against `orm_adapter` to make sure it works as
+advertised.
+
+To run the tests:
+
+```
+$ rake spec
+```
 
 ## Contributing
 
