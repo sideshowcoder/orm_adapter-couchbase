@@ -84,7 +84,7 @@ shared_examples_for "example app with orm_adapter" do
 
     describe "#find_first" do
       describe "(conditions)" do
-        it "should return first model matching conditions, if it exists" do
+        xit "should return first model matching conditions, if it exists" do
           user = create_model(user_class, :name => "Fred")
           user_adapter.find_first(:name => "Fred").should == user
         end
@@ -130,8 +130,8 @@ shared_examples_for "example app with orm_adapter" do
       end
     end
 
-    xdescribe "#find_all" do
-      xdescribe "(conditions)" do
+    describe "#find_all" do
+      describe "(conditions)" do
         it "should return only models matching conditions" do
           user1 = create_model(user_class, :name => "Fred")
           user2 = create_model(user_class, :name => "Fred")

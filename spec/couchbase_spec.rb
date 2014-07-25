@@ -7,29 +7,33 @@ if !defined?(Couchbase::Model) || !(Couchbase.connect(:bucket => "orm_adapter") 
 else
 
   class User < Couchbase::Model
-    attribute :doc_type, :default => "user"
     attribute :name
     attribute :rating
     design_document :user
     view :notes
+    view :all
   end
 
   class Note < Couchbase::Model
-    attribute :doc_type, :default => "note"
-    attribute :user_id
+    attribute :owner_id
     attribute :body, :default => "made by orm"
-    belongs_to :user
+    belongs_to :owner, :class_name => "User"
+    view :all
   end
 
   module OrmAdapterCouchbaseSpec
 
     Couchbase.connection_options = { :bucket => "orm_adapter" }
-    Couchbase::Model::Configuration.design_documents_paths = [File.dirname(__FILE__) + "/design_documents"]
+    Couchbase::Model::Configuration.design_documents_paths = [File.dirname(__FILE__) + "/design_documents/"]
 
 
     # here be the specs!
     describe Couchbase::Model::OrmAdapter do
-      before { Couchbase.bucket.flush }
+      before do
+        Couchbase.bucket.flush
+        User.ensure_design_document!
+        Note.ensure_design_document!
+      end
 
       it_should_behave_like "example app with orm_adapter" do
         let(:user_class) { User }
