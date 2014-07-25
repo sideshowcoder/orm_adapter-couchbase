@@ -9,7 +9,6 @@ else
   class User < Couchbase::Model
     attribute :name
     attribute :rating
-    design_document :user
     view :notes
     view :all
   end

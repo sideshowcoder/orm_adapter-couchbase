@@ -84,22 +84,22 @@ shared_examples_for "example app with orm_adapter" do
 
     describe "#find_first" do
       describe "(conditions)" do
-        xit "should return first model matching conditions, if it exists" do
+        it "should return first model matching conditions, if it exists" do
           user = create_model(user_class, :name => "Fred")
           user_adapter.find_first(:name => "Fred").should == user
         end
 
-        xit "should return nil if no conditions match" do
+        it "should return nil if no conditions match" do
           user_adapter.find_first(:name => "Betty").should == nil
         end
 
-        xit 'should return the first model if no conditions passed' do
+        it 'should return the first model if no conditions passed' do
           user = create_model(user_class)
           create_model(user_class)
           user_adapter.find_first.should == user
         end
 
-        xit "when conditions contain associated object, should return first model if it exists" do
+        it "when conditions contain associated object, should return first model if it exists" do
           user = create_model(user_class)
           note = create_model(note_class, :owner => user)
           note_adapter.find_first(:owner => user).should == note
@@ -113,7 +113,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:order => <order array>)" do
+      describe "(:order => <order array>)" do
         it "should return first model in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -121,7 +121,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:conditions => <conditions hash>, :order => <order array>)" do
+      describe "(:conditions => <conditions hash>, :order => <order array>)" do
         it "should return first model matching conditions, in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -158,7 +158,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:order => <order array>)" do
+      describe "(:order => <order array>)" do
         it "should return all models in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -167,7 +167,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:conditions => <conditions hash>, :order => <order array>)" do
+      describe "(:conditions => <conditions hash>, :order => <order array>)" do
         it "should return only models matching conditions, in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -198,7 +198,7 @@ shared_examples_for "example app with orm_adapter" do
       end
     end
 
-    xdescribe "#create!(attributes)" do
+    describe "#create!(attributes)" do
       it "should create a model with the passed attributes" do
         user = user_adapter.create!(:name => "Fred")
         reload_model(user).name.should == "Fred"
@@ -214,14 +214,14 @@ shared_examples_for "example app with orm_adapter" do
         reload_model(note).owner.should == user
       end
 
-      it "when attributes contain an has_many assoc, should create a model with the attributes" do
+      xit "when attributes contain an has_many assoc, should create a model with the attributes" do
         notes = [create_model(note_class), create_model(note_class)]
         user = user_adapter.create!(:notes => notes)
         reload_model(user).notes.should == notes
       end
     end
 
-    xdescribe "#destroy(instance)" do
+    describe "#destroy(instance)" do
       it "should destroy the instance if it exists" do
         user = create_model(user_class)
         (!!user_adapter.destroy(user)).should == true  # make it work with both RSpec 2.x and 3.x

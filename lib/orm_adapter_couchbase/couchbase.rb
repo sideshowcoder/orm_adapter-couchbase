@@ -17,7 +17,16 @@ module Couchbase
 
       def create! attrs
         # make sure our views produce consistent data
-        klass.create! attrs, :persisted => 1
+        klass.create! attrs
+      end
+
+      def destroy model
+        return nil unless model.is_a? klass
+
+        # Hack to get around delete removing the id from the model
+        id = model.id
+        model.delete
+        model.id = id
       end
 
       def get! id
@@ -35,18 +44,46 @@ module Couchbase
         view_name, conditions = best_view_for_conditions(conditions)
 
         # make sure our views produce consistent data
-        stream = klass.send view_name, :stale => false
+        stream = klass.send(view_name, :stale => false)
+        stream = apply_non_view_conditions(stream, conditions)
+        stream = apply_order(stream, order)
+      end
 
-        if conditions.empty?
-          stream
-        else
-          stream.select { |e|
-            conditions.all? { |field, value| e.send(field) == value }
-          }
-        end
+      def find_first options = {}
+        find_all(options).first
       end
 
       private
+      def apply_non_view_conditions stream, conditions
+        return stream if conditions.empty?
+        stream.select { |item| satisfies_conditions? item, conditions }
+      end
+
+      def satisfies_conditions? item, conditions
+        conditions.all? { |field, value| item.send(field) == value }
+      end
+
+      def apply_order stream, order
+        return stream if order.empty?
+
+        case order.first
+        when Array
+          field, sort_order = order.shift
+        else
+          field = order.shift
+          if [:asc, :desc].include? order.to_enum.peek 
+            sort_order = order.shift
+          else
+            sort_order = :asc
+          end
+        end
+
+        stream = stream.sort_by(&field.to_sym)
+        stream = stream.reverse if sort_order == :desc
+
+        apply_order(stream, order)
+      end
+
       def best_view_for_conditions conditions
         view_name = :all
 
