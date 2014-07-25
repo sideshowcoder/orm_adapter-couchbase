@@ -66,22 +66,54 @@ module Couchbase
       def apply_order stream, order
         return stream if order.empty?
 
-        case order.first
-        when Array
-          field, sort_order = order.shift
-        else
-          field = order.shift
-          if [:asc, :desc].include? order.to_enum.peek 
-            sort_order = order.shift
-          else
-            sort_order = :asc
+        stream.to_a.sort_by! { |item|
+          sort = []
+          order = order.to_enum
+          o = order.next
+          loop do
+            case o
+            when Array
+              value = item.send(o[0])
+              value = invert_value(value) if o[1] == :desc
+              sort.push(value)
+            else
+              value = item.send(o[0])
+              case order.peek
+              when :asc
+                begin
+                  order.next
+                rescue StopIteration
+                  break
+                end
+              when :desc
+                value = invert_value(value)
+                begin
+                  order.next
+                rescue StopIteration
+                  break
+                end
+              end
+              sort.push(value)
+            end
+            begin
+              o = order.next
+            rescue StopIteration
+              break
+            end
           end
+          sort
+        }
+      end
+
+      def invert_value value
+        case value
+        when String
+          inverse = []
+          value.each_codepoint { |c| inverse.push(-c) }
+          inverse
+        else
+          -value
         end
-
-        stream = stream.sort_by(&field.to_sym)
-        stream = stream.reverse if sort_order == :desc
-
-        apply_order(stream, order)
       end
 
       def best_view_for_conditions conditions
