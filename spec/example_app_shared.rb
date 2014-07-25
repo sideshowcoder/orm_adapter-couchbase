@@ -105,7 +105,7 @@ shared_examples_for "example app with orm_adapter" do
           note_adapter.find_first(:owner => user).should == note
         end
 
-        xit "understands :id as a primary key condition (allowing scoped finding)" do
+        it "understands :id as a primary key condition (allowing scoped finding)" do
           create_model(user_class, :name => "Fred")
           user = create_model(user_class, :name => "Fred")
           user_adapter.find_first(:id => user.id, :name => "Fred").should == user
@@ -113,7 +113,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      describe "(:order => <order array>)" do
+      xdescribe "(:order => <order array>)" do
         it "should return first model in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -121,7 +121,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      describe "(:conditions => <conditions hash>, :order => <order array>)" do
+      xdescribe "(:conditions => <conditions hash>, :order => <order array>)" do
         it "should return first model matching conditions, in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -176,7 +176,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:limit => <number of items>)" do
+      describe "(:limit => <number of items>)" do
         it "should return a limited set of matching models" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)

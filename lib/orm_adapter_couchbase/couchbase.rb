@@ -47,10 +47,19 @@ module Couchbase
         stream = klass.send(view_name, :stale => false)
         stream = apply_non_view_conditions(stream, conditions)
         stream = apply_order(stream, order)
+        stream = stream.take(limit) if limit
+        stream
       end
 
       def find_first options = {}
-        find_all(options).first
+        id = options.delete(:id)
+        conditions, _ = extract_conditions!(options)
+
+        if id
+          apply_non_view_conditions([get(id)], conditions).first
+        else
+          find_all(options).first
+        end
       end
 
       private
