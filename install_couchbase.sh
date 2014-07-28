@@ -18,6 +18,8 @@ sudo env INSTALL_DONT_START_SERVER=1 dpkg -i $couchbase_file
 
 # start the server
 /opt/couchbase/bin/couchbase-server -- -noinput -detached
+# wait for it to accept connections
+while ! echo exit | nc localhost 8091; do sleep 10; done
 
 # setting up the server with the test bucket
 CBCLI=/opt/couchbase/bin/couchbase-cli
