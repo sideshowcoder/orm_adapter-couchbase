@@ -16,6 +16,26 @@ Or install it yourself as:
 
     $ gem install orm_adapter_couchbase
 
+## Usage
+
+See the [specs for
+details](https://github.com/sideshowcoder/orm_adapter_couchbase/blob/master/spec/couchbase_spec.rb).
+The Couchbase ORM adapter relies on at least the `all` view to be present which
+should simple return all the object for a given type. This doesn't have great
+performance of course, like any full scan, so it's recommended to create
+additional views to query by other attributes. If you want to for example query
+a user by name, create a view for it.
+
+```ruby
+class User < Couchbase::Model
+  attribute :name
+  view :by_name
+end
+```
+
+Currently only single attributes are supported, but the idea is to support
+others via `by_name_and_rating` in the future.
+
 ## ORM Adapter
 
 > "Provides a single point of entry for popular ruby ORMs. Its target audience
