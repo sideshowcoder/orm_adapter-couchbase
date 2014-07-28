@@ -1,0 +1,11 @@
+language: ruby
+env:
+  - COUCHBASE_VERSION=2.5.1
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.2
+before_install:
+  - ./install_couchbase.sh
+  - sudo apt-get -y install libcouchbase2-dev
+
