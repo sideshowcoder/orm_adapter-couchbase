@@ -6,10 +6,16 @@ if !defined?(Couchbase::Model) || !(Couchbase.connect(:bucket => "orm_adapter") 
   puts "** require 'couchbase-model' and start couchbase with a bucket 'orm_adapter' created to run the specs in #{__FILE__}"
 else
 
+  # this is needed to get around the circular dependency since we need to
+  # constantize Note as well as User to have has_many and belongs_to of damn
+  # circular dependency
+  class Note < Couchbase::Model
+  end
+
   class User < Couchbase::Model
     attribute :name
     attribute :rating
-    view :notes
+    has_many :notes
     view :all
   end
 

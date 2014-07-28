@@ -1,6 +1,7 @@
 require "couchbase/model"
 require "orm_adapter_couchbase/ext/couchbase_model_equality"
 require "orm_adapter_couchbase/ext/couchbase_model_patches"
+require "orm_adapter_couchbase/ext/couchbase_model_has_many"
 
 module Couchbase
   class Model
