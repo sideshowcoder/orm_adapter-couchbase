@@ -8,7 +8,7 @@ echo "deb http://packages.couchbase.com/ubuntu oneiric oneiric/main" | sudo tee 
 sudo apt-get update
 
 # install couchbase
-couchbase_file="couchbase-server-enterprise_$COUCHBASE_VERSION_x86_64.deb"
+couchbase_file="couchbase-server-enterprise_${COUCHBASE_VERSION}_x86_64.deb"
 cd /tmp
 echo "Downloading Couchbase $COUCHBASE_VERSION"
 wget http://packages.couchbase.com.s3.amazonaws.com/releases/$COUCHBASE_VERSION/$couchbase_file
