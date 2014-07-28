@@ -20,7 +20,6 @@ else
   end
 
   class Note < Couchbase::Model
-    attribute :owner_id
     attribute :body, :default => "made by orm"
     belongs_to :owner, :class_name => "User"
     view :all
