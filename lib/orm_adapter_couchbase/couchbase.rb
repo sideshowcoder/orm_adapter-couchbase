@@ -55,7 +55,7 @@ module Couchbase
 
       def find_first options = {}
         id = options.delete(:id)
-        conditions, _ = extract_conditions!(options)
+        conditions, _ = extract_conditions!(options.dup)
 
         if id
           apply_non_view_conditions([get(id)], conditions).first

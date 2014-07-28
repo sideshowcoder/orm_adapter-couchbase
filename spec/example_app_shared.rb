@@ -113,7 +113,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:order => <order array>)" do
+      describe "(:order => <order array>)" do
         it "should return first model in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
@@ -121,7 +121,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:conditions => <conditions hash>, :order => <order array>)" do
+      describe "(:conditions => <conditions hash>, :order => <order array>)" do
         it "should return first model matching conditions, in specified order" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
