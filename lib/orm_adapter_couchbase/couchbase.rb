@@ -40,12 +40,12 @@ module Couchbase
 
       def find_all options = {}
 
+        view_name, view_options, options = view_for_options(options)
+
         conditions, order, limit, offset = extract_conditions!(options)
 
-        view_name, conditions = best_view_for_conditions(conditions)
-
         # make sure our views produce consistent data
-        stream = klass.send(view_name, :stale => false)
+        stream = klass.send(view_name, view_options)
         stream = apply_non_view_conditions(stream, conditions)
         stream = apply_order(stream, order)
         stream = stream.drop(offset) if offset
@@ -77,7 +77,7 @@ module Couchbase
       def apply_order stream, order
         return stream if order.empty?
 
-        stream.to_a.sort_by! { |item|
+        stream.to_a.sort_by do |item|
           sort = []
           order = order.to_enum
           o = order.next
@@ -113,7 +113,7 @@ module Couchbase
             end
           end
           sort
-        }
+        end
       end
 
       def invert_value value
@@ -127,16 +127,30 @@ module Couchbase
         end
       end
 
-      def best_view_for_conditions conditions
+      def view_for_options options
         view_name = :all
+        view_options = { :stale => false }
+        conditions, order, limit, offset = extract_conditions!(options.dup)
 
-        new_conditions = conditions.reject { |c|
+        remaining_conditions = conditions.reject { |c|
           view_name = "by_#{c}" if klass.respond_to?("by_#{c}")
         }
 
+        options = { :conditions => remaining_conditions, :order => order }
+
+        if remaining_conditions.empty?
+          # merge limit, and offset conditions into view query
+          view_options[:limit] = limit if limit
+          view_options[:skip] = offset if offset
+        else
+          options[:limit] = limit if limit
+          options[:offset] = offset if offset
+        end
+
         raise MissingViewException.new(view_name) unless klass.respond_to?(view_name)
 
-        [view_name, new_conditions]
+
+        [view_name, view_options, options]
       end
 
     end
