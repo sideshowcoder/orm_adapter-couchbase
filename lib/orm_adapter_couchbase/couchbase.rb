@@ -47,6 +47,7 @@ module Couchbase
         stream = klass.send(view_name, :stale => false)
         stream = apply_non_view_conditions(stream, conditions)
         stream = apply_order(stream, order)
+        stream = stream.drop(offset) if offset
         stream = stream.take(limit) if limit
         stream
       end

@@ -186,7 +186,7 @@ shared_examples_for "example app with orm_adapter" do
         end
       end
 
-      xdescribe "(:offset => <offset number>) with limit (as DataMapper doesn't allow offset on its own)" do
+      describe "(:offset => <offset number>) with limit (as DataMapper doesn't allow offset on its own)" do
         it "should return an offset set of matching models" do
           user1 = create_model(user_class, :name => "Fred", :rating => 1)
           user2 = create_model(user_class, :name => "Fred", :rating => 2)
