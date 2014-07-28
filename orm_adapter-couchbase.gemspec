@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'orm_adapter_couchbase/version'
+require 'orm_adapter-couchbase/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "orm_adapter_couchbase"
+  spec.name          = "orm_adapter-couchbase"
   spec.version       = OrmAdapterCouchbase::VERSION
   spec.authors       = ["Philipp Fehre"]
   spec.email         = ["philipp.fehre@googlemail.com"]
   spec.description   = %q{Adds Couchbase support to ORM Adapter}
   spec.summary       = %q{Use Couchbase Model to add support for Couchbase ORM Adapter}
-  spec.homepage      = "https://github.com/sideshowcoder/orm_adapter_couchbase"
+  spec.homepage      = "https://github.com/sideshowcoder/orm_adapter-couchbase"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

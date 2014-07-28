@@ -6,7 +6,7 @@ WARNING: This is not finished, and very early stage to see if this can work
 
 Add this line to your application's Gemfile:
 
-    gem 'orm_adapter_couchbase'
+    gem 'orm_adapter-couchbase'
 
 And then execute:
 
@@ -14,12 +14,12 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install orm_adapter_couchbase
+    $ gem install orm_adapter-couchbase
 
 ## Usage
 
 See the [specs for
-details](https://github.com/sideshowcoder/orm_adapter_couchbase/blob/master/spec/couchbase_spec.rb).
+details](https://github.com/sideshowcoder/orm_adapter-couchbase/blob/master/spec/couchbase_spec.rb).
 The Couchbase ORM adapter relies on at least the `all` view to be present which
 should simple return all the object for a given type. This doesn't have great
 performance of course, like any full scan, so it's recommended to create

@@ -1,7 +1,7 @@
 require "couchbase/model"
-require "orm_adapter_couchbase/ext/couchbase_model_equality"
-require "orm_adapter_couchbase/ext/couchbase_model_patches"
-require "orm_adapter_couchbase/ext/couchbase_model_has_many"
+require "orm_adapter-couchbase/ext/couchbase_model_equality"
+require "orm_adapter-couchbase/ext/couchbase_model_patches"
+require "orm_adapter-couchbase/ext/couchbase_model_has_many"
 
 module Couchbase
   class Model
@@ -158,7 +158,7 @@ module Couchbase
 
         raise MissingViewException.new(view_name) unless klass.respond_to?(view_name)
 
-        p [view_name, view_options, options]
+        [view_name, view_options, options]
       end
 
     end

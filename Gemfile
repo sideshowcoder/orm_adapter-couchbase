@@ -1,6 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in orm_adapter_couchbase.gemspec
+# Specify your gem's dependencies in orm_adapter-couchbase.gemspec
 gemspec
-
-gem "pry"
