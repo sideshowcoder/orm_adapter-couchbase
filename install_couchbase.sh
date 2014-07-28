@@ -13,7 +13,15 @@ cd /tmp
 echo "Downloading Couchbase $COUCHBASE_VERSION"
 wget http://packages.couchbase.com.s3.amazonaws.com/releases/$COUCHBASE_VERSION/$couchbase_file
 echo "Installing Couchbase $COUCHBASE_VERSION"
+# more control on start needed sorry debian package
+export INSTALL_DONT_START_SERVER=1
 sudo dpkg -i $couchbase_file
+
+# start the server
+sudo ulimit -n 10240
+sudo ulimit -c unlimited
+sudo ulimit -l unlimited
+/opt/couchbase/bin/couchbase-server -- -noinput -detached
 
 # setting up the server with the test bucket
 CBCLI=/opt/couchbase/bin/couchbase-cli
