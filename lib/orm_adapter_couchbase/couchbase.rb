@@ -44,13 +44,15 @@ module Couchbase
 
         conditions, order, limit, offset = extract_conditions!(options)
 
-        # make sure our views produce consistent data
         stream = klass.send(view_name, view_options)
-        stream = apply_non_view_conditions(stream, conditions)
+
+        # deal with everything which wasn't handled via the view
+        stream = apply_conditions(stream, conditions)
         stream = apply_order(stream, order)
         stream = stream.drop(offset) if offset
         stream = stream.take(limit) if limit
-        stream
+
+        stream.to_a # make sure to return an array
       end
 
       def find_first options = {}
@@ -58,14 +60,14 @@ module Couchbase
         conditions, _ = extract_conditions!(options.dup)
 
         if id
-          apply_non_view_conditions([get(id)], conditions).first
+          apply_conditions([get(id)], conditions).first
         else
           find_all(options).first
         end
       end
 
       private
-      def apply_non_view_conditions stream, conditions
+      def apply_conditions stream, conditions
         return stream if conditions.empty?
         stream.select { |item| satisfies_conditions? item, conditions }
       end
@@ -132,8 +134,15 @@ module Couchbase
         view_options = { :stale => false }
         conditions, order, limit, offset = extract_conditions!(options.dup)
 
-        remaining_conditions = conditions.reject { |c|
-          view_name = "by_#{c}" if klass.respond_to?("by_#{c}")
+        # TODO would be nice to merge multiple conditions into one view name
+        # for example users have a rating, and the comprised key is [user,
+        # rating] if the view is named "by_user_and_rating" we could then merge
+        # this into one and even apply the ordering in one go
+        remaining_conditions = conditions.reject { |condition, value|
+          if klass.respond_to?("by_#{condition}")
+            view_name = "by_#{condition}".to_sym
+            view_options[:key] = value
+          end
         }
 
         options = { :conditions => remaining_conditions, :order => order }
@@ -149,8 +158,7 @@ module Couchbase
 
         raise MissingViewException.new(view_name) unless klass.respond_to?(view_name)
 
-
-        [view_name, view_options, options]
+        p [view_name, view_options, options]
       end
 
     end

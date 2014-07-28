@@ -16,7 +16,7 @@ else
     attribute :name
     attribute :rating
     has_many :notes
-    view :all
+    view :all, :by_name
   end
 
   class Note < Couchbase::Model
